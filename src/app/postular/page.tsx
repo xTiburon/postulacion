@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlanetIcon } from "@/components/PlanetIcon";
+import { Logo } from "@/components/Logo";
 import { PostulacionForm } from "./PostulacionForm";
 
 export const metadata = {
@@ -11,7 +11,7 @@ export default function PostularPage() {
     <div className="flex min-h-dvh flex-col">
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
         <Link href="/" className="flex items-center gap-2">
-          <PlanetIcon className="h-7 w-7" />
+          <Logo className="h-7 w-7" />
           <span className="font-display text-sm font-bold tracking-[0.2em] text-muted uppercase">
             PlanetMC
           </span>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlanetIcon } from "@/components/PlanetIcon";
+import { Logo } from "@/components/Logo";
 import { REQUISITOS } from "@/lib/preguntas";
 
 export default function HomePage() {
@@ -7,7 +7,7 @@ export default function HomePage() {
     <div className="flex min-h-dvh flex-col">
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
         <div className="flex items-center gap-2">
-          <PlanetIcon className="h-7 w-7" />
+          <Logo className="h-7 w-7" />
           <span className="font-display text-sm font-bold tracking-[0.2em] text-muted uppercase">
             PlanetMC
           </span>
@@ -21,7 +21,7 @@ export default function HomePage() {
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center sm:px-10">
-        <PlanetIcon className="mb-8 h-16 w-16 sm:h-20 sm:w-20" />
+        <Logo className="mb-8 h-20 w-20 sm:h-24 sm:w-24" />
 
         <h1 className="font-display text-glow text-4xl font-extrabold tracking-tight sm:text-6xl">
           Postulaciones de Staff

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { signIn } from "@/auth";
-import { PlanetIcon } from "@/components/PlanetIcon";
+import { Logo } from "@/components/Logo";
 
 export const metadata = {
   title: "Ingresar — Admin PlanetMC",
@@ -16,7 +16,7 @@ export default async function AdminLoginPage({
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center px-6">
       <Link href="/" className="mb-8 flex items-center gap-2">
-        <PlanetIcon className="h-7 w-7" />
+        <Logo className="h-7 w-7" />
         <span className="font-display text-sm font-bold tracking-[0.2em] text-muted uppercase">
           PlanetMC
         </span>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
-import { PlanetIcon } from "@/components/PlanetIcon";
+import { Logo } from "@/components/Logo";
 
 export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -10,7 +10,7 @@ export default async function AdminPanelLayout({ children }: { children: React.R
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-panel-border px-6 py-4 sm:px-10">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <PlanetIcon className="h-6 w-6" />
+            <Logo className="h-6 w-6" />
             <span className="font-display text-xs font-bold tracking-[0.2em] text-muted uppercase">
               PlanetMC
             </span>

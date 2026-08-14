@@ -19,8 +19,20 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://postulacion.planetmc.net"),
   title: "Postulaciones Staff — PlanetMC",
   description: "Sistema oficial de postulaciones de Staff de PlanetMC.",
+  openGraph: {
+    title: "Postulaciones Staff — PlanetMC",
+    description: "Sistema oficial de postulaciones de Staff de PlanetMC.",
+    images: ["/logo.png"],
+  },
+  twitter: {
+    card: "summary",
+    title: "Postulaciones Staff — PlanetMC",
+    description: "Sistema oficial de postulaciones de Staff de PlanetMC.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
