@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import type { Estado, Prisma } from "@prisma/client";
+import { FilaPostulacion } from "./FilaPostulacion";
 
 export const metadata = { title: "Postulaciones — Admin PlanetMC" };
 export const dynamic = "force-dynamic";
@@ -12,18 +13,27 @@ const ESTADOS: { value: Estado | ""; label: string }[] = [
   { value: "RECHAZADO", label: "Rechazadas" },
 ];
 
-const estadoEstilo: Record<Estado, string> = {
-  REVISAR: "bg-warning/15 text-warning border-warning/30",
-  APROBADO: "bg-success/15 text-success border-success/30",
-  RECHAZADO: "bg-danger/15 text-danger border-danger/30",
-};
+const CAMPOS_ORDEN = {
+  fecha: "creadoEn",
+  edad: "edad",
+  minecraft: "minecraftUsuario",
+} as const;
+
+type CampoOrden = keyof typeof CAMPOS_ORDEN;
+
+const POR_PAGINA = 20;
 
 export default async function PostulacionesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; estado?: string }>;
+  searchParams: Promise<{ q?: string; estado?: string; sort?: string; dir?: string; pagina?: string }>;
 }) {
-  const { q = "", estado = "" } = await searchParams;
+  const sp = await searchParams;
+  const q = sp.q ?? "";
+  const estado = sp.estado ?? "";
+  const sort: CampoOrden = sp.sort && sp.sort in CAMPOS_ORDEN ? (sp.sort as CampoOrden) : "fecha";
+  const dir: "asc" | "desc" = sp.dir === "asc" ? "asc" : "desc";
+  const pagina = Math.max(1, Number(sp.pagina) || 1);
 
   const where: Prisma.PostulacionWhereInput = {
     ...(estado ? { estado: estado as Estado } : {}),
@@ -38,9 +48,15 @@ export default async function PostulacionesPage({
       : {}),
   };
 
+  const total = await prisma.postulacion.count({ where });
+  const totalPaginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+  const paginaActual = Math.min(pagina, totalPaginas);
+
   const postulaciones = await prisma.postulacion.findMany({
     where,
-    orderBy: { creadoEn: "desc" },
+    orderBy: { [CAMPOS_ORDEN[sort]]: dir },
+    skip: (paginaActual - 1) * POR_PAGINA,
+    take: POR_PAGINA,
     select: {
       id: true,
       email: true,
@@ -49,12 +65,54 @@ export default async function PostulacionesPage({
       edad: true,
       estado: true,
       creadoEn: true,
+      notasAdmin: true,
     },
   });
 
+  function href(overrides: Record<string, string | number>) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (estado) params.set("estado", estado);
+    params.set("sort", sort);
+    params.set("dir", dir);
+    params.set("pagina", String(paginaActual));
+    for (const [k, v] of Object.entries(overrides)) {
+      if (v === "") params.delete(k);
+      else params.set(k, String(v));
+    }
+    return `/admin/postulaciones?${params.toString()}`;
+  }
+
+  function encabezadoOrdenable(campo: CampoOrden, etiqueta: string) {
+    const activo = sort === campo;
+    const nuevaDir = activo && dir === "desc" ? "asc" : "desc";
+    return (
+      <Link
+        href={href({ sort: campo, dir: nuevaDir, pagina: 1 })}
+        className={`inline-flex items-center gap-1 hover:text-text ${activo ? "text-text" : ""}`}
+      >
+        {etiqueta}
+        {activo && <span className="text-accent-2">{dir === "desc" ? "↓" : "↑"}</span>}
+      </Link>
+    );
+  }
+
+  const exportHref = `/api/admin/postulaciones/export?${new URLSearchParams({
+    ...(q ? { q } : {}),
+    ...(estado ? { estado } : {}),
+  }).toString()}`;
+
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Postulaciones</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold tracking-tight">Postulaciones</h1>
+        <a
+          href={exportHref}
+          className="rounded-full border border-panel-border px-4 py-1.5 text-xs font-medium text-muted transition hover:border-accent hover:text-text"
+        >
+          ↓ Exportar CSV
+        </a>
+      </div>
 
       <form className="mt-6 flex flex-wrap gap-3" method="get">
         <input
@@ -83,42 +141,30 @@ export default async function PostulacionesPage({
         </button>
       </form>
 
-      <div className="glass-panel mt-6 overflow-x-auto rounded-2xl">
-        <table className="w-full min-w-[640px] text-left text-sm">
+      <p className="mt-4 text-xs text-muted">
+        {total} {total === 1 ? "postulación" : "postulaciones"} en total
+      </p>
+
+      <div className="glass-panel mt-3 overflow-x-auto rounded-2xl">
+        <table className="w-full min-w-[760px] text-left text-sm">
           <thead>
             <tr className="border-b border-panel-border text-xs uppercase tracking-wide text-muted">
-              <th className="px-5 py-3 font-medium">Minecraft</th>
+              <th className="px-5 py-3 font-medium">{encabezadoOrdenable("minecraft", "Minecraft")}</th>
               <th className="px-5 py-3 font-medium">Discord</th>
               <th className="px-5 py-3 font-medium">Correo</th>
-              <th className="px-5 py-3 font-medium">Edad</th>
+              <th className="px-5 py-3 font-medium">{encabezadoOrdenable("edad", "Edad")}</th>
               <th className="px-5 py-3 font-medium">Estado</th>
-              <th className="px-5 py-3 font-medium">Fecha</th>
+              <th className="px-5 py-3 font-medium">{encabezadoOrdenable("fecha", "Fecha")}</th>
+              <th className="px-5 py-3 font-medium text-right">Acciones rápidas</th>
             </tr>
           </thead>
           <tbody>
             {postulaciones.map((p) => (
-              <tr key={p.id} className="border-b border-panel-border/60 last:border-0 hover:bg-panel/60">
-                <td className="px-5 py-3">
-                  <Link href={`/admin/postulaciones/${p.id}`} className="font-medium text-text hover:text-accent-2">
-                    {p.minecraftUsuario}
-                  </Link>
-                </td>
-                <td className="px-5 py-3 text-muted">{p.discordUsuario}</td>
-                <td className="px-5 py-3 text-muted">{p.email}</td>
-                <td className="px-5 py-3 text-muted">{p.edad}</td>
-                <td className="px-5 py-3">
-                  <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${estadoEstilo[p.estado]}`}>
-                    {p.estado}
-                  </span>
-                </td>
-                <td className="px-5 py-3 text-muted">
-                  {new Intl.DateTimeFormat("es-CL", { dateStyle: "short", timeStyle: "short" }).format(p.creadoEn)}
-                </td>
-              </tr>
+              <FilaPostulacion key={p.id} p={{ ...p, tieneNotas: !!p.notasAdmin?.trim() }} />
             ))}
             {postulaciones.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-5 py-10 text-center text-muted">
+                <td colSpan={7} className="px-5 py-10 text-center text-muted">
                   No hay postulaciones que coincidan con la búsqueda.
                 </td>
               </tr>
@@ -126,6 +172,32 @@ export default async function PostulacionesPage({
           </tbody>
         </table>
       </div>
+
+      {totalPaginas > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-3 text-sm text-muted">
+          <Link
+            href={href({ pagina: Math.max(1, paginaActual - 1) })}
+            aria-disabled={paginaActual === 1}
+            className={`rounded-full border border-panel-border px-3.5 py-1.5 transition hover:border-accent hover:text-text ${
+              paginaActual === 1 ? "pointer-events-none opacity-40" : ""
+            }`}
+          >
+            ← Anterior
+          </Link>
+          <span>
+            Página {paginaActual} de {totalPaginas}
+          </span>
+          <Link
+            href={href({ pagina: Math.min(totalPaginas, paginaActual + 1) })}
+            aria-disabled={paginaActual === totalPaginas}
+            className={`rounded-full border border-panel-border px-3.5 py-1.5 transition hover:border-accent hover:text-text ${
+              paginaActual === totalPaginas ? "pointer-events-none opacity-40" : ""
+            }`}
+          >
+            Siguiente →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

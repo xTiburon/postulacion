@@ -24,11 +24,56 @@ export default async function DetallePostulacionPage({
 
   const respuestas = postulacion.respuestas as Record<string, string | boolean>;
 
+  const [anterior, siguiente] = await Promise.all([
+    prisma.postulacion.findFirst({
+      where: {
+        OR: [
+          { creadoEn: { gt: postulacion.creadoEn } },
+          { creadoEn: postulacion.creadoEn, id: { gt: postulacion.id } },
+        ],
+      },
+      orderBy: [{ creadoEn: "asc" }, { id: "asc" }],
+      select: { id: true },
+    }),
+    prisma.postulacion.findFirst({
+      where: {
+        OR: [
+          { creadoEn: { lt: postulacion.creadoEn } },
+          { creadoEn: postulacion.creadoEn, id: { lt: postulacion.id } },
+        ],
+      },
+      orderBy: [{ creadoEn: "desc" }, { id: "desc" }],
+      select: { id: true },
+    }),
+  ]);
+
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/admin/postulaciones" className="text-sm text-muted hover:text-accent-2">
-        ← Volver a postulaciones
-      </Link>
+      <div className="flex items-center justify-between gap-3">
+        <Link href="/admin/postulaciones" className="text-sm text-muted hover:text-accent-2">
+          ← Volver a postulaciones
+        </Link>
+        <div className="flex gap-2">
+          <Link
+            href={anterior ? `/admin/postulaciones/${anterior.id}` : "#"}
+            aria-disabled={!anterior}
+            className={`rounded-full border border-panel-border px-3.5 py-1.5 text-xs font-medium text-muted transition hover:border-accent hover:text-text ${
+              !anterior ? "pointer-events-none opacity-30" : ""
+            }`}
+          >
+            ← Anterior
+          </Link>
+          <Link
+            href={siguiente ? `/admin/postulaciones/${siguiente.id}` : "#"}
+            aria-disabled={!siguiente}
+            className={`rounded-full border border-panel-border px-3.5 py-1.5 text-xs font-medium text-muted transition hover:border-accent hover:text-text ${
+              !siguiente ? "pointer-events-none opacity-30" : ""
+            }`}
+          >
+            Siguiente →
+          </Link>
+        </div>
+      </div>
 
       <div className="glass-panel mt-4 rounded-2xl px-6 py-6 sm:px-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
