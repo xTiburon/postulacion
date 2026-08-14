@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Estado {
+  REVISAR
+  APROBADO
+  RECHAZADO
+}
+
+model Postulacion {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  minecraftUsuario String
+  discordUsuario   String
+  edad             Int
+  estado           Estado   @default(REVISAR)
+
+  // Respuestas del cuestionario (pregunta -> respuesta). Se guardan como
+  // JSON para poder ajustar las preguntas del formulario sin migraciones.
+  respuestas       Json
+
+  notasAdmin       String?  @db.Text
+
+  creadoEn         DateTime @default(now())
+  actualizadoEn    DateTime @updatedAt
+
+  @@index([estado])
+  @@index([creadoEn])
+}
