@@ -42,11 +42,15 @@ Guarda ambos valores, los necesitarás en el paso 4 y 6.
 
 ---
 
-## 3. Obtener tu ID de Discord (para tener acceso al panel)
+## 3. Dar acceso al panel admin (por rol de Discord)
+
+El sistema le da acceso al panel a **cualquiera que tenga un rol específico** en tu servidor de Discord — así no hay que agregar administradores uno por uno, y si le quitas el rol a alguien, pierde el acceso automáticamente.
 
 1. En Discord, ve a Ajustes → Avanzado → activa **Modo de desarrollador**.
-2. Click derecho sobre tu propio perfil → **Copiar ID de usuario**.
-3. Guarda ese número — es el que va en `ADMIN_DISCORD_IDS`. Puedes agregar varios administradores separando los IDs por coma.
+2. Click derecho sobre el **ícono de tu servidor** → **Copiar ID del servidor** → esto es `ADMIN_DISCORD_GUILD_ID`.
+3. Ve a Ajustes del servidor → Roles → click derecho sobre el rol de staff/admin → **Copiar ID** → esto es `ADMIN_DISCORD_ROLE_IDS` (puedes poner varios roles separados por coma).
+
+¿Prefieres dar acceso a personas puntuales sin depender de un rol? Puedes además (u opcionalmente en vez de esto) usar `ADMIN_DISCORD_IDS` con IDs de usuario específicos (click derecho sobre el perfil de la persona → "Copiar ID de usuario").
 
 ---
 
@@ -60,7 +64,8 @@ Guarda ambos valores, los necesitarás en el paso 4 y 6.
    AUTH_SECRET="<genera uno abajo>"
    AUTH_DISCORD_ID="<client id de discord>"
    AUTH_DISCORD_SECRET="<client secret de discord>"
-   ADMIN_DISCORD_IDS="<tu id de discord>"
+   ADMIN_DISCORD_GUILD_ID="<id de tu servidor de discord>"
+   ADMIN_DISCORD_ROLE_IDS="<id del rol de staff>"
    ```
 3. Genera `AUTH_SECRET` con:
    ```bash
@@ -127,7 +132,7 @@ Listo — `postulacion.planetmc.net` queda funcionando de forma gratuita (dentro
 
 ## Mantenimiento
 
-**Agregar/quitar administradores:** edita la variable `ADMIN_DISCORD_IDS` en Vercel (Settings → Environment Variables) y vuelve a desplegar.
+**Agregar/quitar administradores:** como el acceso es por rol de Discord, simplemente asigna o quita el rol de staff a la persona en Discord — no requiere tocar Vercel ni volver a desplegar. Si en cambio quieres dar acceso a alguien puntual sin ese rol, agrega su ID a `ADMIN_DISCORD_IDS` en Vercel y vuelve a desplegar.
 
 **Agregar, quitar o modificar preguntas del formulario:** edita `src/lib/preguntas.ts` — es la única fuente de verdad, se usa automáticamente en el formulario, la validación y la vista de detalle del panel admin. No requiere migraciones porque las respuestas se guardan como JSON.
 
