@@ -21,7 +21,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-bold">Panel de postulaciones</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Panel de postulaciones</h1>
       <p className="mt-1 text-sm text-muted">Resumen general del proceso de selección.</p>
 
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -32,7 +32,7 @@ export default async function AdminDashboardPage() {
             className="glass-panel rounded-2xl px-5 py-6 transition hover:border-accent"
           >
             <p className="text-xs uppercase tracking-wide text-muted">{t.label}</p>
-            <p className={`mt-2 font-display text-3xl font-extrabold ${t.color}`}>{t.valor}</p>
+            <p className={`mt-2 text-3xl font-semibold tracking-tight ${t.color}`}>{t.valor}</p>
           </Link>
         ))}
       </div>

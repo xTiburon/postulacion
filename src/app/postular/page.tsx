@@ -20,7 +20,7 @@ export default function PostularPage() {
 
       <main className="flex-1 px-6 pb-20 sm:px-10">
         <div className="mx-auto mb-10 max-w-2xl text-center">
-          <h1 className="font-display text-glow text-3xl font-extrabold sm:text-4xl">
+          <h1 className="text-glow text-3xl font-semibold tracking-tight sm:text-4xl">
             Postulación de Staff
           </h1>
           <p className="mt-3 text-sm text-muted sm:text-base">

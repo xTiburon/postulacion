@@ -54,7 +54,7 @@ export default async function PostulacionesPage({
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-bold">Postulaciones</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Postulaciones</h1>
 
       <form className="mt-6 flex flex-wrap gap-3" method="get">
         <input
@@ -62,12 +62,12 @@ export default async function PostulacionesPage({
           name="q"
           defaultValue={q}
           placeholder="Buscar por correo, Minecraft o Discord..."
-          className="min-w-[240px] flex-1 rounded-lg border border-panel-border bg-void/60 px-4 py-2 text-sm text-text placeholder:text-muted/70 outline-none focus:border-accent"
+          className="min-w-[240px] flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-text placeholder:text-muted/60 outline-none transition focus:border-accent focus:bg-white/[0.05]"
         />
         <select
           name="estado"
           defaultValue={estado}
-          className="rounded-lg border border-panel-border bg-void/60 px-4 py-2 text-sm text-text outline-none focus:border-accent"
+          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-text outline-none transition focus:border-accent focus:bg-white/[0.05]"
         >
           {ESTADOS.map((e) => (
             <option key={e.value} value={e.value}>

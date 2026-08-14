@@ -5,7 +5,7 @@ import Link from "next/link";
 import { SECCIONES } from "@/lib/preguntas";
 
 const inputClass =
-  "w-full rounded-lg border border-panel-border bg-void/60 px-4 py-2.5 text-sm text-text placeholder:text-muted/70 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30";
+  "w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-text placeholder:text-muted/60 outline-none transition focus:border-accent focus:bg-white/[0.05] focus:ring-2 focus:ring-accent/25";
 
 type EstadoEnvio = "idle" | "enviando" | "exito" | "error";
 
@@ -82,18 +82,36 @@ export function PostulacionForm() {
 
   if (estado === "exito") {
     return (
-      <div className="glass-panel mx-auto max-w-lg rounded-2xl px-8 py-12 text-center">
-        <h1 className="font-display text-2xl font-bold text-glow">¡Postulación enviada!</h1>
+      <div className="glass-panel mx-auto max-w-lg rounded-3xl px-8 py-14 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-2 shadow-[0_0_40px_-8px_var(--color-accent)]">
+          <svg viewBox="0 0 24 24" className="h-8 w-8 text-void" fill="none" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        <h1 className="mt-6 text-2xl font-semibold tracking-tight text-glow">
+          Tu formulario se ha enviado correctamente
+        </h1>
         <p className="mt-4 text-muted">
-          Gracias por postular al Staff de PlanetMC. Tu postulación quedó registrada y será
-          revisada por el equipo. Te contactaremos por Discord si avanzas en el proceso.
+          Espera los resultados — te avisaremos por Discord.
         </p>
-        <Link
-          href="/"
-          className="mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-2.5 text-sm font-bold text-void transition hover:brightness-110"
-        >
-          Volver al inicio
-        </Link>
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <a
+            href="https://discord.gg/28SYRxngb9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-2.5 text-sm font-bold text-void transition hover:brightness-110"
+          >
+            Volver al Discord
+          </a>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-full border border-panel-border px-6 py-2.5 text-sm font-medium text-muted transition hover:border-accent hover:text-text"
+          >
+            Volver al inicio
+          </Link>
+        </div>
       </div>
     );
   }
@@ -111,7 +129,7 @@ export function PostulacionForm() {
         </div>
       )}
 
-      <Seccion titulo="Datos básicos">
+      <Seccion titulo="Datos básicos" indice={1}>
         <Campo label="Correo electrónico" htmlFor="email">
           <input id="email" name="email" type="email" required className={inputClass} placeholder="tucorreo@ejemplo.com" />
         </Campo>
@@ -145,8 +163,8 @@ export function PostulacionForm() {
         </Campo>
       </Seccion>
 
-      {SECCIONES.map((seccion) => (
-        <Seccion key={seccion.titulo} titulo={seccion.titulo}>
+      {SECCIONES.map((seccion, i) => (
+        <Seccion key={seccion.titulo} titulo={seccion.titulo} indice={i + 2}>
           {seccion.preguntas.map((p) => {
             if (p.condicional) {
               const valorTrigger = condicionValores[p.condicional.dependsOn];
@@ -163,7 +181,7 @@ export function PostulacionForm() {
                 <label
                   key={p.key}
                   htmlFor={p.key}
-                  className="flex items-start gap-3 rounded-lg border border-panel-border bg-void/40 px-4 py-3 text-sm text-text"
+                  className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-sm text-text transition has-[:checked]:border-accent/50 has-[:checked]:bg-accent/[0.06]"
                 >
                   <input
                     id={p.key}
@@ -228,12 +246,23 @@ export function PostulacionForm() {
   );
 }
 
-function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
+function Seccion({
+  titulo,
+  indice,
+  children,
+}: {
+  titulo: string;
+  indice: number;
+  children: React.ReactNode;
+}) {
   return (
-    <section className="glass-panel mb-8 rounded-2xl px-6 py-6 sm:px-8">
-      <h2 className="font-display mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent-2">
-        {titulo}
-      </h2>
+    <section className="glass-panel mb-6 rounded-3xl px-6 py-7 sm:px-9 sm:py-8">
+      <div className="mb-6 flex items-baseline gap-3">
+        <span className="font-display text-xs font-bold text-accent-2/70">
+          {String(indice).padStart(2, "0")}
+        </span>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-2">{titulo}</h2>
+      </div>
       <div className="space-y-5">{children}</div>
     </section>
   );

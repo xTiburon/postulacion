@@ -42,8 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="starfield" aria-hidden="true" />
-        <div className="nebula" aria-hidden="true" />
+        <div className="smoke-bg" aria-hidden="true" />
         <div className="relative z-10 flex min-h-full flex-1 flex-col">{children}</div>
       </body>
     </html>

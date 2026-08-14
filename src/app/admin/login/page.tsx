@@ -23,7 +23,7 @@ export default async function AdminLoginPage({
       </Link>
 
       <div className="glass-panel w-full max-w-sm rounded-2xl px-8 py-10 text-center">
-        <h1 className="font-display text-xl font-bold">Panel de administración</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Panel de administración</h1>
         <p className="mt-2 text-sm text-muted">
           Inicia sesión con la cuenta de Discord autorizada para gestionar postulaciones.
         </p>

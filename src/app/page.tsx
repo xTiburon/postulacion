@@ -23,7 +23,7 @@ export default function HomePage() {
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-16 text-center sm:px-10">
         <Logo className="mb-8 h-20 w-20 sm:h-24 sm:w-24" />
 
-        <h1 className="font-display text-glow text-4xl font-extrabold tracking-tight sm:text-6xl">
+        <h1 className="text-glow text-4xl font-semibold tracking-tight sm:text-6xl">
           Postulaciones de Staff
         </h1>
 
