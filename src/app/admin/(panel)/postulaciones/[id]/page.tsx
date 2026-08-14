@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { TODAS_LAS_PREGUNTAS } from "@/lib/preguntas";
 import { cambiarEstado, guardarNotas } from "../actions";
+import { BotonEliminar } from "./BotonEliminar";
 import type { Estado } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -143,6 +144,13 @@ export default async function DetallePostulacionPage({
             Guardar notas
           </button>
         </form>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between rounded-2xl border border-danger/20 bg-danger/5 px-6 py-4 sm:px-8">
+        <p className="text-xs text-muted">
+          Eliminar borra la postulación permanentemente de la base de datos.
+        </p>
+        <BotonEliminar id={postulacion.id} minecraftUsuario={postulacion.minecraftUsuario} />
       </div>
     </div>
   );

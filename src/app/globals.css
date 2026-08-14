@@ -102,3 +102,15 @@ body {
 .text-glow {
   text-shadow: 0 0 28px color-mix(in srgb, var(--color-accent) 45%, transparent);
 }
+
+/* El menú nativo de <select> lo dibuja el sistema operativo, no nuestro CSS
+   oscuro — forzamos fondo blanco y texto negro en las opciones para que
+   siempre se puedan leer, sin depender del tema del SO/navegador. */
+select {
+  color-scheme: light;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #111827;
+}

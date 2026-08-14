@@ -158,7 +158,7 @@ export function PostulacionForm() {
             className={inputClass}
           />
         </Campo>
-        <Campo label="Edad" htmlFor="edad">
+        <Campo label="Edad" htmlFor="edad" hint="Recuerda: se requieren 17 años o más para postular.">
           <input id="edad" name="edad" type="number" required min={1} max={120} className={inputClass} />
         </Campo>
       </Seccion>
@@ -271,10 +271,12 @@ function Seccion({
 function Campo({
   label,
   htmlFor,
+  hint,
   children,
 }: {
   label: string;
   htmlFor: string;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -283,6 +285,7 @@ function Campo({
         {label}
       </label>
       {children}
+      {hint && <p className="mt-1.5 text-xs text-muted">{hint}</p>}
     </div>
   );
 }

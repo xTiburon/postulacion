@@ -73,7 +73,7 @@ export const TODAS_LAS_PREGUNTAS: Pregunta[] = SECCIONES.flatMap((s) => s.pregun
 
 export const REQUISITOS = [
   "Tener micrófono funcional.",
-  "Tener más de 17 años.",
+  "Tener 17 años o más.",
   "No pertenecer al Staff de otro servidor.",
   "Tener disponibilidad y compromiso para colaborar con el servidor.",
 ];

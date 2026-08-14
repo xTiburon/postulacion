@@ -18,6 +18,7 @@ export default async function AdminPanelLayout({ children }: { children: React.R
           <nav className="flex items-center gap-1 text-sm">
             <NavLink href="/admin/postulaciones">Postulaciones</NavLink>
             <NavLink href="/admin/aprobados">Aprobados</NavLink>
+            <NavLink href="/admin/registro">Registro</NavLink>
           </nav>
         </div>
 

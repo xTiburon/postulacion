@@ -27,9 +27,9 @@ export default function HomePage() {
           Postulaciones de Staff
         </h1>
 
-        <p className="mt-5 max-w-xl text-balance text-base text-muted sm:text-lg">
+        <p className="mt-5 max-w-xl text-balance text-base leading-relaxed text-muted sm:text-lg">
           Únete al equipo que mantiene PlanetMC en órbita. Completa una postulación honesta y
-          detallada — la revisamos con calma y te contactamos por Discord.
+          detallada. La revisamos con calma y te contactamos por Discord.
         </p>
 
         <section className="glass-panel mt-10 w-full max-w-xl rounded-2xl px-6 py-6 text-left sm:px-8">

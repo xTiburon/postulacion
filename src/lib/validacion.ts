@@ -46,10 +46,14 @@ export const PostulacionSchema = z.object({
     .string()
     .trim()
     .regex(/^@[a-zA-Z0-9._]{2,32}$/, "Debe tener el formato @usuario."),
+  // Sin mínimo ligado al requisito de edad a propósito: bloquearlo solo
+  // empuja a que los menores mientan. El requisito (17+) se comunica antes
+  // de postular y el equipo revisa cada caso con la edad real declarada.
   edad: z.coerce
     .number({ message: "La edad es obligatoria." })
     .int()
-    .min(18, "Debes tener más de 17 años para postular."),
+    .min(1, "Ingresa una edad válida.")
+    .max(120, "Ingresa una edad válida."),
   respuestas: RespuestasSchema,
 });
 
