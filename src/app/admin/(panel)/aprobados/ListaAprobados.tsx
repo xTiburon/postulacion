@@ -5,7 +5,7 @@ import { useState } from "react";
 type Aprobado = { id: string; minecraftUsuario: string; discordUsuario: string };
 
 function formatoEntrada(a: Aprobado) {
-  return `**Minecraft:** ${a.minecraftUsuario}\n**Discord:** ${a.discordUsuario}`;
+  return `${a.minecraftUsuario} | ${a.discordUsuario}`;
 }
 
 export function ListaAprobados({ aprobados }: { aprobados: Aprobado[] }) {
@@ -21,7 +21,7 @@ export function ListaAprobados({ aprobados }: { aprobados: Aprobado[] }) {
     }, 1800);
   }
 
-  const textoCompleto = aprobados.map(formatoEntrada).join("\n\n");
+  const textoCompleto = aprobados.map(formatoEntrada).join("\n");
 
   return (
     <div>
