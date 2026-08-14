@@ -139,3 +139,13 @@ Listo — `postulacion.planetmc.net` queda funcionando de forma gratuita (dentro
 **Ver la base de datos directamente:** `npm run db:studio` abre una interfaz visual de Prisma sobre tu base de datos.
 
 **Revisar postulaciones:** todo se hace desde `/admin` una vez autenticado con una cuenta de Discord autorizada.
+
+---
+
+## Seguridad de los datos (por qué nunca se pierde información)
+
+- **Las respuestas del formulario se guardan como JSON**, no como columnas fijas. Esto significa que agregar, quitar o modificar preguntas en `src/lib/preguntas.ts` **nunca borra ni corrompe** postulaciones existentes: cada postulación conserva exactamente lo que la persona respondió el día que postuló, sin importar cómo cambie el formulario después. Si quitas una pregunta, su respuesta antigua simplemente deja de mostrarse en el panel, pero sigue intacta en la base de datos.
+- **Eliminar una postulación es la única forma de perder datos**, y es una acción manual, con confirmación explícita, que además queda registrada en `/admin/registro` (quién la eliminó y cuándo) — nunca ocurre automáticamente.
+- **Respaldo completo bajo demanda:** desde el panel principal (`/admin`), el botón "Respaldo completo (JSON)" descarga absolutamente todo (todas las postulaciones con sus respuestas completas + el registro de auditoría) en un archivo. Es independiente del formulario actual — sirve como copia de seguridad sin importar qué tan viejo o distinto sea el formulario con el que se llenó cada una.
+- **Los cambios estructurales a la base de datos** (por ejemplo, agregar un nuevo campo fijo como `email`) se aplican mediante migraciones de Prisma versionadas en el repositorio (`prisma/migrations/`) — son cambios explícitos, revisables y reversibles, nunca un borrado silencioso.
+- **Neon** (tu proveedor de base de datos) mantiene además su propio historial de recuperación ante desastres (point-in-time recovery) por su cuenta, como red de seguridad adicional a nivel de infraestructura.

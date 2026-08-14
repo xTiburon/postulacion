@@ -21,8 +21,18 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Panel de postulaciones</h1>
-      <p className="mt-1 text-sm text-muted">Resumen general del proceso de selección.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Panel de postulaciones</h1>
+          <p className="mt-1 text-sm text-muted">Resumen general del proceso de selección.</p>
+        </div>
+        <a
+          href="/api/admin/backup"
+          className="rounded-full border border-panel-border px-4 py-1.5 text-xs font-medium text-muted transition hover:border-accent hover:text-text"
+        >
+          ↓ Respaldo completo (JSON)
+        </a>
+      </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {tarjetas.map((t) => (
